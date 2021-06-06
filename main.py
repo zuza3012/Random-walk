@@ -79,31 +79,83 @@ def make_histogram(n, d, len, max):
     return l
 
 
-N = 200
-d = 1
-l = make_histogram(N, d, 1, 100000)
+N1 = 200
+d = 2
+maxx = 100000
+l1 = make_histogram(N1, d, 1, maxx)
+print("1")
+
+N2 = 100
+l2 = make_histogram(N2, d, 1, maxx)
+print("2")
+
+N3 = 20
+l3 = make_histogram(N3, d, 1, maxx)
+print("3")
+
+
 
 b = 20
-n, bins, patches = plt.hist(l, b, histtype='bar')
+n1, bins1, patches1 = plt.hist(l1, b, histtype='bar')
+n2, bins2, patches2 = plt.hist(l2, b, histtype='bar')
+n3, bins3, patches3 = plt.hist(l3, b, histtype='bar')
+
 plt.close()
-n = n/len(l)
-n = np.append(n, 0)
-print(sum(n))
+n1 = n1/len(l1)
+n1 = np.append(n1, 0)
+n2 = n2/len(l2)
+n2 = np.append(n2, 0)
+n3 = n3/len(l3)
+n3 = np.append(n3, 0)
 
-bins = np.array(bins, dtype=int)
+print(sum(n1))
+print(sum(n2))
+print(sum(n3))
 
 
-leng = len(bins)                          #the number of data
-mean = sum(bins*n)/leng                 #note this correction
-sigma = sum(n*(bins-mean)**2)/leng        #note this correction
+bins1 = np.array(bins1, dtype=int)
+bins2 = np.array(bins2, dtype=int)
+bins3 = np.array(bins3, dtype=int)
 
 
-popt,pcov = curve_fit(gaus,bins,n,p0=[1,mean,sigma])
-x =  np.arange(round(min(bins)), round(max(bins)), 0.1)
-plt.scatter(bins,n,label='data')
-plt.plot(x,gaus(x,*popt),'r-',label='fit')
+
+leng1 = len(bins1)                          
+mean1 = sum(bins1*n1)/leng1                 
+sigma1 = sum(n1*(bins1-mean1)**2)/leng1        
+
+leng2 = len(bins2)                          
+mean2 = sum(bins2*n2)/leng2              
+sigma2 = sum(n2*(bins2-mean2)**2)/leng2 
+
+leng3 = len(bins3)                          
+mean3 = sum(bins3*n3)/leng3                 
+sigma3 = sum(n3*(bins3-mean3)**2)/leng3 
+
+
+
+popt1,pcov1 = curve_fit(gaus,bins1,n1,p0=[1,mean1,sigma1])
+x1 =  np.arange(round(min(bins1)), round(max(bins1)), 0.1)
+
+popt2,pcov2 = curve_fit(gaus,bins2,n2,p0=[1,mean2,sigma2])
+x2 =  np.arange(round(min(bins2)), round(max(bins2)), 0.1)
+
+popt3,pcov3 = curve_fit(gaus,bins3,n3,p0=[1,mean3,sigma3])
+x3 =  np.arange(round(min(bins3)), round(max(bins3)), 0.1)
+
+
+
+plt.scatter(bins1,n1, color='red', label="N = " + str(N1))
+plt.scatter(bins2,n2, color='green', label="N = " + str(N2))
+plt.scatter(bins3,n3,color='blue', label="N = " + str(N3))
+
+
+plt.plot(x1,gaus(x1,*popt1),'r-')
+plt.plot(x2,gaus(x2,*popt2),'g-')
+plt.plot(x3,gaus(x3,*popt3),'b-')
+
+
 plt.legend()
-plt.title('d = ' + str(d) + ', ' + 'N = ' + str(N))
+plt.title('d = ' + str(d))
 plt.xlabel('Distance')
 plt.ylabel('P')
 plt.show()
